@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <ImageButton
+                android:id="@+id/btnAlarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/button_background"
+                android:padding="40dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/clock" />
+
+            <ImageButton
+                android:id="@+id/btnSleepTracker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/button_background"
+                android:padding="40dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/cardiogram" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/tvAlarmClock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/alarm_clock"
+                android:textAlignment="center"
+                android:textColor="@color/activity_text"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/tvSleepTracker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/sleep_tracker"
+                android:textAlignment="center"
+                android:textColor="@color/activity_text"
+                android:textSize="18dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <ImageButton
+                android:id="@+id/btnRouteTracker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/button_background"
+                android:padding="40dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/route" />
+
+            <ImageButton
+                android:id="@+id/btnWeightTracker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/button_background"
+                android:padding="40dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/phone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/tvRouteTracker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/route_tracker"
+                android:textAlignment="center"
+                android:textColor="@color/activity_text"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/tvWeightTracker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/weight_tracker"
+                android:textAlignment="center"
+                android:textColor="@color/activity_text"
+                android:textSize="18dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

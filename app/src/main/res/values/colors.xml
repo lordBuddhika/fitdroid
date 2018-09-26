@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1d1f20</color>
+    <color name="colorPrimaryDark">#1d1f20</color>
+    <color name="colorAccent">#ff5329</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="activity_background">#2b2929</color>
+    <color name="activity_text">#c2c2c2</color>
+    <color name="button_background">#434343</color>
+    <color name="button_background_success">#146e35</color>
+    <color name="button_background_danger">#bc2828</color>
+</resources>

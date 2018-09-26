@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">FitDroid</string>
+    <string name="alarm_clock">Alarm Clock</string>
+    <string name="sleep_tracker">Sleep Tracker</string>
+    <string name="route_tracker">Route Tracker</string>
+    <string name="weight_tracker">Weight Tracker</string>
+    <string name="distance">DISTANCE</string>
+    <string name="top_speed">TOP SPEED</string>
+    <string name="duration">DURATION</string>
+    <string name="low_weight">&lt;40 Kg               Low Weight</string>
+    <string name="over_weight">&gt;51 Kg               Over Weight</string>
+</resources>
