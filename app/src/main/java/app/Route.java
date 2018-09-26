@@ -1,4 +1,4 @@
-package route;
+package app;
 
 public class Route {
     private int id;

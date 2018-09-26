@@ -26,10 +26,10 @@
                 android:id="@+id/btnAlarm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/home_button_margin"
                 android:layout_weight="1"
                 android:background="@color/button_background"
-                android:padding="40dp"
+                android:padding="@dimen/home_button_image_padding"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/clock" />
 
@@ -37,10 +37,10 @@
                 android:id="@+id/btnSleepTracker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/home_button_margin"
                 android:layout_weight="1"
                 android:background="@color/button_background"
-                android:padding="40dp"
+                android:padding="@dimen/home_button_image_padding"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/cardiogram" />
         </LinearLayout>
@@ -86,10 +86,10 @@
                 android:id="@+id/btnRouteTracker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/home_button_margin"
                 android:layout_weight="1"
                 android:background="@color/button_background"
-                android:padding="40dp"
+                android:padding="@dimen/home_button_image_padding"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/route" />
 
@@ -97,10 +97,10 @@
                 android:id="@+id/btnWeightTracker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/home_button_margin"
                 android:layout_weight="1"
                 android:background="@color/button_background"
-                android:padding="40dp"
+                android:padding="@dimen/home_button_image_padding"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/phone" />
         </LinearLayout>

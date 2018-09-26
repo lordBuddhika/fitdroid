@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import route.Route;
-import route.RouteHelper;
-import route.RouteListAdapter;
+import app.Route;
+import app.RouteHelper;
+import app.RouteListAdapter;
 
 public class RouteActivity extends AppCompatActivity {
 
@@ -75,7 +75,7 @@ public class RouteActivity extends AppCompatActivity {
                 intent.putExtra("topspeed", String.valueOf(route.getTopSpeed()));
                 intent.putExtra("duration", String.valueOf(route.getDuration()));
                 startActivity(intent);
-                //Toast.makeText(getApplicationContext(), String.valueOf(route.getId()),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), String.valueOf(app.getId()),Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -95,11 +95,11 @@ public class RouteActivity extends AppCompatActivity {
             @Override
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                lk.sliit.mad.fitdroid.route.Route route = rlaRoutes.get(position);
+                lk.sliit.mad.fitdroid.app.Route app = rlaRoutes.get(position);
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                intent.putExtra("distance", route.getDistance());
-                intent.putExtra("distance", route.getTopSpeed());
-                intent.putExtra("distance", route.getDuration());
+                intent.putExtra("distance", app.getDistance());
+                intent.putExtra("distance", app.getTopSpeed());
+                intent.putExtra("distance", app.getDuration());
                 startActivityForResult(intent, 1000);
             }
         };
@@ -121,7 +121,7 @@ public class RouteActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 /*
-        route.RouteHelper routeHelper = route.RouteHelper.getRouterInstance(getApplicationContext());
+        app.RouteHelper routeHelper = app.RouteHelper.getRouterInstance(getApplicationContext());
         routeHelper.destroyGPS();
         t.interrupt();
 */
@@ -131,7 +131,7 @@ public class RouteActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 /*
-        route.RouteHelper routeHelper = route.RouteHelper.getRouterInstance(getApplicationContext());
+        app.RouteHelper routeHelper = app.RouteHelper.getRouterInstance(getApplicationContext());
         routeHelper.destroyGPS();
 */
     }
@@ -140,7 +140,7 @@ public class RouteActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 /*
-        route.RouteHelper routeHelper = route.RouteHelper.getRouterInstance(getApplicationContext());
+        app.RouteHelper routeHelper = app.RouteHelper.getRouterInstance(getApplicationContext());
         routeHelper.destroyGPS();
 */
     }
