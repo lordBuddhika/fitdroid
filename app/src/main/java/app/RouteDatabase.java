@@ -98,4 +98,9 @@ public class RouteDatabase extends SQLiteOpenHelper {
         db.update(TABLE_NAME, cvals, "route_id = ? ", new String[] { Integer.toString(route_id)} );
         return true;
     }
+
+    public Integer deleteRoute(Integer route_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_NAME, "route_id = ?", new String[] { Integer.toString(route_id)});
+    }
 }
