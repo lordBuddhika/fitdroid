@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import app.Route;
 import app.RouteDatabase;
 
 public class RouteUpdateActivity extends AppCompatActivity {
@@ -48,6 +49,28 @@ public class RouteUpdateActivity extends AppCompatActivity {
             }
         });
 
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                delete();
+            }
+        });
+
+    }
+
+    protected void delete() {
+        RouteDatabase rd = new RouteDatabase(getApplicationContext());
+        Integer deletion_status = rd.deleteRoute(Integer.parseInt(et_routeid.getText().toString()));
+
+        if(deletion_status == 1) {
+            Toast.makeText(getApplicationContext(), "Route has been successfully deleted!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Failed! Something strange happened while trying to delete the route!", Toast.LENGTH_SHORT).show();
+        }
+
+        Intent intent = new Intent(RouteUpdateActivity.this, RouteActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     protected boolean update() {

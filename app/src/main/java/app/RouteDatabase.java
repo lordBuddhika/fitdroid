@@ -99,7 +99,7 @@ public class RouteDatabase extends SQLiteOpenHelper {
         return true;
     }
 
-    public Integer deleteRoute(Integer route_id) {
+    public Integer deleteRoute(int route_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, "route_id = ?", new String[] { Integer.toString(route_id)});
     }
