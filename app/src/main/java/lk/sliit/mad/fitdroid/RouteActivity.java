@@ -9,10 +9,15 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import app.Route;
+import app.RouteDatabase;
 import app.RouteHelper;
 import app.RouteListAdapter;
 
@@ -27,38 +32,15 @@ public class RouteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_route);
         startClock();
 
-        Route r1 = new Route(1,504.34,7.52,470);
-        Route r2 = new Route(2,497.80,7.23,485);
-        Route r3 = new Route(3,422.66,7.67,464);
-        Route r4 = new Route(4,275.47,7.95,415);
-        Route r5 = new Route(5,686.41,7.03,436);
-        Route r6 = new Route(6,854.40,7.63,448);
-        Route r7 = new Route(7,504.34,7.52,470);
-        Route r8 = new Route(8,497.80,7.23,485);
-        Route r9 = new Route(9,422.66,7.67,464);
-        Route r10 = new Route(10,275.47,7.95,415);
-        Route r11 = new Route(11,686.41,7.03,436);
-        Route r12 = new Route(12,854.40,7.63,448);
-        Route r13 = new Route(13,422.66,7.67,464);
-        Route r14 = new Route(14,504.34,7.52,470);
-        Route r15 = new Route(15,422.66,7.67,464);
-
         ArrayList<Route> routesArr = new ArrayList<>();
-        routesArr.add(r1);
-        routesArr.add(r2);
-        routesArr.add(r3);
-        routesArr.add(r4);
-        routesArr.add(r5);
-        routesArr.add(r6);
-        routesArr.add(r7);
-        routesArr.add(r8);
-        routesArr.add(r9);
-        routesArr.add(r10);
-        routesArr.add(r11);
-        routesArr.add(r12);
-        routesArr.add(r13);
-        routesArr.add(r14);
-        routesArr.add(r15);
+        ArrayList<Route> db_routes;
+        RouteDatabase rd = new RouteDatabase(getApplicationContext());
+        //rd.newRoute(11.11, 22.22, 33.33, "2018-12-12 23:59:59");
+        db_routes = rd.getRoutes();
+
+        for (Route dbr: db_routes) {
+            routesArr.add( new Route(Integer.valueOf(dbr.getId()), Double.valueOf(dbr.getDistance()), Double.valueOf(dbr.getTopSpeed()), Double.valueOf(dbr.getDuration()), String.valueOf(dbr.getTimeStart()), String.valueOf(dbr.getTimeEnd()) ));
+        }
 
         final RouteListAdapter rla = new RouteListAdapter(this, R.layout.route_list_layout, routesArr);
 
