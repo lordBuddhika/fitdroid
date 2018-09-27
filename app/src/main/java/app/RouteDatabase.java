@@ -55,7 +55,7 @@ public class RouteDatabase extends SQLiteOpenHelper {
         ArrayList<Route> route = new ArrayList<>();
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM routes", null);
+        Cursor res = db.rawQuery("SELECT * FROM routes ORDER BY route_id DESC", null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {

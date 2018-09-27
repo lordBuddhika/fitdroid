@@ -13,22 +13,23 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
-public class RouteHelper implements LocationListener {
+public class RouteGPSHelper implements LocationListener {
     private static Context context;
     private static double distance = 0.0;
     private static double speed;
-    private static RouteHelper instance;
+    private static double top_speed = 0.0;
+    private static RouteGPSHelper instance;
     private static double latp = 999.0;
     private static double lonp = 999.0;
     private static LocationManager lm;
 
-    private RouteHelper() {}
+    private RouteGPSHelper() {}
 
-    public static RouteHelper getRouterInstance(Context c) {
+    public static RouteGPSHelper getRouterInstance(Context c) {
         context = c;
 
         if(instance == null) {
-            instance = new RouteHelper();
+            instance = new RouteGPSHelper();
             return instance;
         } else {
             return instance;
@@ -61,7 +62,15 @@ public class RouteHelper implements LocationListener {
 
     public double getSpeed() {
         getLocation();
+        if(top_speed < speed) {
+            top_speed = speed;
+        }
         return speed;
+    }
+
+    public double getTopSpeed() {
+        getSpeed();
+        return top_speed;
     }
 
     public double CalculationByDistance(double lat1, double lon1, double lat2, double lon2) {
