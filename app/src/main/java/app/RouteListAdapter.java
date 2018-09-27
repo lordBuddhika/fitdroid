@@ -41,8 +41,8 @@ public class RouteListAdapter extends ArrayAdapter<Route> {
         TextView tvDuration = v.findViewById(R.id.tvDuration);
         TextView tvDate = v.findViewById(R.id.tvDate);
 
-        tvDistance.setText(String.valueOf(route.getDistance() + "m"));
-        tvTopspeed.setText(String.valueOf(route.getTopSpeed() + "km/h"));
+        tvDistance.setText(String.valueOf(route.getDistance() + " km"));
+        tvTopspeed.setText(String.valueOf(route.getTopSpeed() + " km/h"));
         tvDuration.setText(String.valueOf(route.getDuration() + " mins"));
         tvDate.setText(String.valueOf(route.getTimeStart()));
 

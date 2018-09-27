@@ -11,6 +11,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,34 +19,67 @@ import java.util.Date;
 
 import app.Route;
 import app.RouteDatabase;
-import app.RouteHelper;
+import app.RouteGPSHelper;
 import app.RouteListAdapter;
 
 public class RouteActivity extends AppCompatActivity {
 
-    // Initiate a thread for GPS logging
-    Thread t;
+    Thread tClock;
+    Thread tTimer;
+
+    RouteDatabase rd;
+
+    public String time_start;
+    public double distance;
+    public double top_speed;
+    public double duration;
+
+    DecimalFormat precision_two;
+    SimpleDateFormat date_format;
+
+    ListView lvRoute;
+    Switch swtRouteActivate;
+    TextView tvDistance;
+    TextView tvTopspeed;
+    TextView tvDuration;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
-        startClock();
 
-        ArrayList<Route> routesArr = new ArrayList<>();
-        ArrayList<Route> db_routes;
-        RouteDatabase rd = new RouteDatabase(getApplicationContext());
-        //rd.newRoute(11.11, 22.22, 33.33, "2018-12-12 23:59:59");
-        db_routes = rd.getRoutes();
+        lvRoute = findViewById(R.id.lvRoute);
+        swtRouteActivate = findViewById(R.id.swtRouteActivate);
+        tvDistance = findViewById(R.id.tvDistance);
+        tvTopspeed = findViewById(R.id.tvHighestSpeed);
+        tvDuration = findViewById(R.id.tvDuration);
+        precision_two = new DecimalFormat("0.00");
 
-        for (Route dbr: db_routes) {
-            routesArr.add( new Route(Integer.valueOf(dbr.getId()), Double.valueOf(dbr.getDistance()), Double.valueOf(dbr.getTopSpeed()), Double.valueOf(dbr.getDuration()), String.valueOf(dbr.getTimeStart()), String.valueOf(dbr.getTimeEnd()) ));
-        }
+        updateList();
 
-        final RouteListAdapter rla = new RouteListAdapter(this, R.layout.route_list_layout, routesArr);
+        swtRouteActivate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                boolean switchState = swtRouteActivate.isChecked();
+                if(switchState) {
+                    Date presentTime_Date = Calendar.getInstance().getTime();
+                    date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    time_start = date_format.format(presentTime_Date);
+                    startClock();
+                } else {
+                    rd.newRoute(distance, Double.parseDouble(precision_two.format(top_speed)), Double.parseDouble(precision_two.format(duration/60)), time_start);
+                    updateList();
 
-        ListView lvRoute = findViewById(R.id.lvRoute);
-        lvRoute.setAdapter(rla);
+                    distance = 0.0;
+                    top_speed = 0.0;
+                    duration = 0.0;
+
+                    tClock.interrupt();
+                    tTimer.interrupt();
+                }
+            }
+        });
 
         lvRoute.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -57,82 +91,32 @@ public class RouteActivity extends AppCompatActivity {
                 intent.putExtra("topspeed", String.valueOf(route.getTopSpeed()));
                 intent.putExtra("duration", String.valueOf(route.getDuration()));
                 startActivity(intent);
-                //Toast.makeText(getApplicationContext(), String.valueOf(app.getId()),Toast.LENGTH_SHORT).show();
             }
         });
-
-        final Switch swtRouteActivate = findViewById(R.id.swtRouteActivate);
-        swtRouteActivate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                boolean switchState = swtRouteActivate.isChecked();
-                if(switchState) {
-                    startClock();
-                }
-            }
-        });
-
-/*
-        ListView.OnClickListener listViewListener = new ListView.OnItemClickListener() {
-            @Override
-
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                lk.sliit.mad.fitdroid.app.Route app = rlaRoutes.get(position);
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                intent.putExtra("distance", app.getDistance());
-                intent.putExtra("distance", app.getTopSpeed());
-                intent.putExtra("distance", app.getDuration());
-                startActivityForResult(intent, 1000);
-            }
-        };
-        //set the listener to the list view
-        lvRoute.setOnItemClickListener((AdapterView.OnItemClickListener) listViewListener);
-*/
-
-
-
-
     }
 
+    protected void updateList() {
+        ArrayList<Route> route_list = new ArrayList<>();
 
+        rd = new RouteDatabase(getApplicationContext());
+        ArrayList<Route> sql_routes = rd.getRoutes();
 
+        for (Route route: sql_routes) {
+            route_list.add( new Route(Integer.valueOf(route.getId()), Double.valueOf(route.getDistance()), Double.valueOf(route.getTopSpeed()), Double.valueOf(route.getDuration()), String.valueOf(route.getTimeStart()), String.valueOf(route.getTimeEnd()) ));
+        }
 
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-/*
-        app.RouteHelper routeHelper = app.RouteHelper.getRouterInstance(getApplicationContext());
-        routeHelper.destroyGPS();
-        t.interrupt();
-*/
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-/*
-        app.RouteHelper routeHelper = app.RouteHelper.getRouterInstance(getApplicationContext());
-        routeHelper.destroyGPS();
-*/
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-/*
-        app.RouteHelper routeHelper = app.RouteHelper.getRouterInstance(getApplicationContext());
-        routeHelper.destroyGPS();
-*/
+        RouteListAdapter rla = new RouteListAdapter(this, R.layout.route_list_layout, route_list);
+        lvRoute.setAdapter(rla);
     }
 
     private void startClock(){
 
-        Switch swtRouteActivate = findViewById(R.id.swtRouteActivate);
+        swtRouteActivate = findViewById(R.id.swtRouteActivate);
         final boolean switchState = swtRouteActivate.isChecked();
 
-        t = new Thread() {
+        Toast.makeText(getApplicationContext(), "Route tracking started!", Toast.LENGTH_SHORT).show();
+
+        tClock = new Thread() {
 
             @Override
             public void run() {
@@ -142,9 +126,35 @@ public class RouteActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                RouteHelper routeHelper = RouteHelper.getRouterInstance(getApplicationContext());
-                                TextView tvDist = findViewById(R.id.tvDistance);
-                                tvDist.setText(String.valueOf(routeHelper.getDistance()));
+                                RouteGPSHelper routeGPSHelper = RouteGPSHelper.getRouterInstance(getApplicationContext());
+
+                                distance = routeGPSHelper.getDistance();
+                                top_speed = routeGPSHelper.getTopSpeed();
+
+                                tvDistance.setText(String.valueOf(distance));
+                                tvTopspeed.setText(String.valueOf(precision_two.format(top_speed)));
+                                tvDuration.setText(precision_two.format(duration/60));
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+        tClock.start();
+
+
+        tTimer = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted() && switchState) {
+                        Thread.sleep(100);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                duration += 0.1;
                             }
                         });
                     }
@@ -153,6 +163,37 @@ public class RouteActivity extends AppCompatActivity {
             }
         };
 
-        t.start();
+        tTimer.start();
+
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+/*
+        app.RouteGPSHelper routeHelper = app.RouteGPSHelper.getRouterInstance(getApplicationContext());
+        routeHelper.destroyGPS();
+        t.interrupt();
+*/
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+/*
+        app.RouteGPSHelper routeHelper = app.RouteGPSHelper.getRouterInstance(getApplicationContext());
+        routeHelper.destroyGPS();
+*/
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        RouteGPSHelper routeGPSHelper = RouteGPSHelper.getRouterInstance(getApplicationContext());
+        routeGPSHelper.destroyGPS();
+
     }
 }
