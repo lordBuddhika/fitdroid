@@ -1,12 +1,16 @@
 package app;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class RouteDatabase extends SQLiteOpenHelper {
 
@@ -67,5 +71,21 @@ public class RouteDatabase extends SQLiteOpenHelper {
         }
 
         return route;
+    }
+
+    public boolean newRoute(double distance, double top_speed, double duration, String time_start) {
+        Date presentTime_Date = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time_end = dateFormat.format(presentTime_Date);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cvals = new ContentValues();
+        cvals.put("distance", distance);
+        cvals.put("top_speed", top_speed);
+        cvals.put("duration", duration);
+        cvals.put("time_start", time_start);
+        cvals.put("time_end", time_end);
+        db.insert(TABLE_NAME, null, cvals);
+        return true;
     }
 }
