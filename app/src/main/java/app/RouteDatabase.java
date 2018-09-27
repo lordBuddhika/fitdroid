@@ -1,8 +1,12 @@
 package app;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 public class RouteDatabase extends SQLiteOpenHelper {
 
@@ -35,5 +39,33 @@ public class RouteDatabase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+    }
+
+    public int getRouteRows() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME);
+        return numRows;
+    }
+
+    public ArrayList<Route> getRoutes() {
+        ArrayList<Route> route = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM routes", null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            route.add(new Route(
+                    res.getInt(res.getColumnIndex(COLUMN_NAME_ROUTEID)),
+                    res.getDouble(res.getColumnIndex(COLUMN_NAME_DISTANCE)),
+                    res.getDouble(res.getColumnIndex(COLUMN_NAME_TOPSPEED)),
+                    res.getDouble(res.getColumnIndex(COLUMN_NAME_DURATION)),
+                    res.getString(res.getColumnIndex(COLUMN_NAME_TIMESTART)),
+                    res.getString(res.getColumnIndex(COLUMN_NAME_TIMEEND)))
+            );
+            res.moveToNext();
+        }
+
+        return route;
     }
 }
