@@ -88,4 +88,14 @@ public class RouteDatabase extends SQLiteOpenHelper {
         db.insert(TABLE_NAME, null, cvals);
         return true;
     }
+
+    public boolean updateRoute(int route_id, double distance, double top_speed, double duration) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cvals = new ContentValues();
+        cvals.put("distance", distance);
+        cvals.put("top_speed", top_speed);
+        cvals.put("duration", duration);
+        db.update(TABLE_NAME, cvals, "route_id = ? ", new String[] { Integer.toString(route_id)} );
+        return true;
+    }
 }
