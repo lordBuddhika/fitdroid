@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import app.Route;
 import app.RouteDatabase;
 
 public class RouteUpdateActivity extends AppCompatActivity {

@@ -27,7 +27,6 @@ public class RouteListAdapter extends ArrayAdapter<Route> {
         rlaRoutes = objects;
     }
 
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
