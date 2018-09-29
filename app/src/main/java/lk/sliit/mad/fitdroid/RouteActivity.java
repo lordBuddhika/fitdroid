@@ -24,24 +24,25 @@ import app.RouteListAdapter;
 
 public class RouteActivity extends AppCompatActivity {
 
-    Thread tClock;
-    Thread tTimer;
+    static Thread tClock;
+    static Thread tTimer;
 
-    RouteDatabase rd;
+    static RouteDatabase route_database;
+    static RouteGPSHelper route_gps_helper;
 
-    public String time_start;
-    public double distance;
-    public double top_speed;
-    public double duration;
+    public static String time_start;
+    public static double distance;
+    public static double top_speed;
+    public static double duration;
 
     DecimalFormat precision_two;
     SimpleDateFormat date_format;
 
-    ListView lvRoute;
-    Switch swtRouteActivate;
-    TextView tvDistance;
-    TextView tvTopspeed;
-    TextView tvDuration;
+    static ListView lvRoute;
+    static Switch swtRouteActivate;
+    static TextView tvDistance;
+    static TextView tvTopspeed;
+    static TextView tvDuration;
 
 
     @Override
@@ -58,6 +59,10 @@ public class RouteActivity extends AppCompatActivity {
 
         updateList();
 
+        if (route_gps_helper != null && route_gps_helper.getGPSStatus()) {
+            swtRouteActivate.setChecked(true);
+        }
+
         swtRouteActivate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -66,14 +71,22 @@ public class RouteActivity extends AppCompatActivity {
                     Date presentTime_Date = Calendar.getInstance().getTime();
                     date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     time_start = date_format.format(presentTime_Date);
-                    startClock();
-                } else {
-                    rd.newRoute(distance, Double.parseDouble(precision_two.format(top_speed)), Double.parseDouble(precision_two.format(duration/60)), time_start);
-                    updateList();
 
-                    distance = 0.0;
-                    top_speed = 0.0;
-                    duration = 0.0;
+                    route_gps_helper = RouteGPSHelper.getRouterInstance(getApplicationContext());
+                    if (route_gps_helper.getGPSStatus()) {
+                        startClock();
+                    } else {
+                        if (swtRouteActivate.isChecked()) {
+                            swtRouteActivate.setChecked(false);
+                        }
+                    }
+                } else {
+                    if (route_gps_helper.getGPSStatus()) {
+                        route_gps_helper.destroyGPS();
+                        route_gps_helper = null;
+                        route_database.newRoute(distance, Double.parseDouble(precision_two.format(top_speed)), Double.parseDouble(precision_two.format(duration/60)), time_start);
+                    }
+                    updateList();
 
                     tClock.interrupt();
                     tTimer.interrupt();
@@ -98,8 +111,8 @@ public class RouteActivity extends AppCompatActivity {
     protected void updateList() {
         ArrayList<Route> route_list = new ArrayList<>();
 
-        rd = new RouteDatabase(getApplicationContext());
-        ArrayList<Route> sql_routes = rd.getRoutes();
+        route_database = new RouteDatabase(getApplicationContext());
+        ArrayList<Route> sql_routes = route_database.getRoutes();
 
         for (Route route: sql_routes) {
             route_list.add( new Route(Integer.valueOf(route.getId()), Double.valueOf(route.getDistance()), Double.valueOf(route.getTopSpeed()), Double.valueOf(route.getDuration()), String.valueOf(route.getTimeStart()), String.valueOf(route.getTimeEnd()) ));
@@ -107,12 +120,21 @@ public class RouteActivity extends AppCompatActivity {
 
         RouteListAdapter rla = new RouteListAdapter(this, R.layout.route_list_layout, route_list);
         lvRoute.setAdapter(rla);
+
+        tvDistance.setText(String.valueOf(distance));
+        tvTopspeed.setText(String.valueOf(precision_two.format(top_speed)));
+        tvDuration.setText(precision_two.format(duration/60));
+
     }
 
     private void startClock(){
 
         swtRouteActivate = findViewById(R.id.swtRouteActivate);
         final boolean switchState = swtRouteActivate.isChecked();
+
+        distance = 0.0;
+        top_speed = 0.0;
+        duration = 0.0;
 
         Toast.makeText(getApplicationContext(), "Route tracking started!", Toast.LENGTH_SHORT).show();
 
@@ -126,14 +148,19 @@ public class RouteActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                RouteGPSHelper routeGPSHelper = RouteGPSHelper.getRouterInstance(getApplicationContext());
+                                route_gps_helper = RouteGPSHelper.getRouterInstance(getApplicationContext());
 
-                                distance = routeGPSHelper.getDistance();
-                                top_speed = routeGPSHelper.getTopSpeed();
+                                if (route_gps_helper.getGPSStatus()) {
+                                    distance = route_gps_helper.getDistance();
+                                    top_speed = route_gps_helper.getTopSpeed();
 
-                                tvDistance.setText(String.valueOf(distance));
-                                tvTopspeed.setText(String.valueOf(precision_two.format(top_speed)));
-                                tvDuration.setText(precision_two.format(duration/60));
+                                    tvDistance.setText(String.valueOf(distance));
+                                    tvTopspeed.setText(String.valueOf(precision_two.format(top_speed)));
+                                    tvDuration.setText(precision_two.format(duration/60));
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "GPS unavailable, tracking disabled!", Toast.LENGTH_SHORT).show();
+                                    tClock.interrupt();
+                                }
                             }
                         });
                     }
@@ -142,7 +169,6 @@ public class RouteActivity extends AppCompatActivity {
             }
         };
         tClock.start();
-
 
         tTimer = new Thread() {
 
@@ -164,36 +190,5 @@ public class RouteActivity extends AppCompatActivity {
         };
 
         tTimer.start();
-
-
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-/*
-        app.RouteGPSHelper routeHelper = app.RouteGPSHelper.getRouterInstance(getApplicationContext());
-        routeHelper.destroyGPS();
-        t.interrupt();
-*/
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-/*
-        app.RouteGPSHelper routeHelper = app.RouteGPSHelper.getRouterInstance(getApplicationContext());
-        routeHelper.destroyGPS();
-*/
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        RouteGPSHelper routeGPSHelper = RouteGPSHelper.getRouterInstance(getApplicationContext());
-        routeGPSHelper.destroyGPS();
-
     }
 }

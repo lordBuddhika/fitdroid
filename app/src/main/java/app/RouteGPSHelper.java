@@ -15,13 +15,14 @@ import java.text.DecimalFormat;
 
 public class RouteGPSHelper implements LocationListener {
     private static Context context;
+    private static RouteGPSHelper instance;
+    private static LocationManager lm;
     private static double distance = 0.0;
     private static double speed;
     private static double top_speed = 0.0;
-    private static RouteGPSHelper instance;
     private static double latp = 999.0;
     private static double lonp = 999.0;
-    private static LocationManager lm;
+    private static boolean gps_status = false;
 
     private RouteGPSHelper() {}
 
@@ -34,7 +35,6 @@ public class RouteGPSHelper implements LocationListener {
         } else {
             return instance;
         }
-
     }
 
     private Location getLocation() {
@@ -48,9 +48,11 @@ public class RouteGPSHelper implements LocationListener {
         if (isGPSEnabled) {
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, (float) 0.01, this);
             Location last_location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            gps_status = true;
             return last_location;
         } else {
             Toast.makeText(context, "Please turn on GPS",Toast.LENGTH_LONG).show();
+            gps_status = false;
             return null;
         }
     }
@@ -71,6 +73,11 @@ public class RouteGPSHelper implements LocationListener {
     public double getTopSpeed() {
         getSpeed();
         return top_speed;
+    }
+
+    public boolean getGPSStatus() {
+        getLocation();
+        return gps_status;
     }
 
     public double CalculationByDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -101,18 +108,16 @@ public class RouteGPSHelper implements LocationListener {
             distance = distance + CalculationByDistance(latp, lonp, latn, lonn);
         }
 
-        //Toast.makeText(context, Double.toString(distance),Toast.LENGTH_LONG).show();
         latp = latn;
         lonp = lonn;
 
         speed = ((location.getSpeed()*3600)/1000);
-        //Toast.makeText(context, Double.toString(speed),Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
-        //Toast.makeText(context, "GPS Status Changed",Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "GPS Status Changed",Toast.LENGTH_LONG).show();
     }
 
     @Override
