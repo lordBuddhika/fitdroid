@@ -74,6 +74,7 @@ public class RouteActivity extends AppCompatActivity {
 
                     route_gps_helper = RouteGPSHelper.getRouterInstance(getApplicationContext());
                     if (route_gps_helper.getGPSStatus()) {
+                        route_gps_helper.vibrate(100);
                         startClock();
                     } else {
                         if (swtRouteActivate.isChecked()) {
@@ -83,6 +84,7 @@ public class RouteActivity extends AppCompatActivity {
                 } else {
                     if (route_gps_helper.getGPSStatus()) {
                         route_gps_helper.destroyGPS();
+                        route_gps_helper.vibrate(100);
                         route_gps_helper = null;
                         route_database.newRoute(distance, Double.parseDouble(precision_two.format(top_speed)), Double.parseDouble(precision_two.format(duration/60)), time_start);
                     }
@@ -158,6 +160,7 @@ public class RouteActivity extends AppCompatActivity {
                                     tvTopspeed.setText(String.valueOf(precision_two.format(top_speed)));
                                     tvDuration.setText(precision_two.format(duration/60));
                                 } else {
+                                    route_gps_helper.vibrate(100);
                                     Toast.makeText(getApplicationContext(), "GPS unavailable, tracking disabled!", Toast.LENGTH_SHORT).show();
                                     tClock.interrupt();
                                 }

@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
@@ -52,6 +53,7 @@ public class RouteGPSHelper implements LocationListener {
             return last_location;
         } else {
             Toast.makeText(context, "Please turn on GPS",Toast.LENGTH_LONG).show();
+            vibrate(500);
             gps_status = false;
             return null;
         }
@@ -93,6 +95,11 @@ public class RouteGPSHelper implements LocationListener {
 
     public void destroyGPS() {
         lm.removeUpdates(this);
+    }
+
+    public void vibrate(int interval) {
+        Vibrator v = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
+        v.vibrate(interval);
     }
 
     @Override
