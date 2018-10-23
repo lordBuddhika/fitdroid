@@ -3,7 +3,7 @@
     package="lk.sliit.mad.fitdroid">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -24,13 +24,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity android:name=".RouteUpdateActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".RouteActivity" />
         </activity>
-
+        <activity android:name=".BMIActivity" />
+        <activity android:name=".BMIOptionsActivity" />
+        <activity android:name=".AlarmActivity" />
+        <activity android:name=".SleepTrackerActivity" />
+        <activity android:name=".SleepTrackerUpdateActivity" />
+        <activity android:name=".AddAlarmActivity"></activity>
     </application>
 
 </manifest>
