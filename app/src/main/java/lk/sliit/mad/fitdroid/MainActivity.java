@@ -29,24 +29,24 @@ public class MainActivity extends AppCompatActivity {
         btnSleepLauncher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(MainActivity.this, SleepTrackerActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, SleepTrackerActivity.class);
+                startActivity(intent);
             }
         });
 
         btnAlarmLauncher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(MainActivity.this, AlarmActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, AlarmActivity.class);
+                startActivity(intent);
             }
         });
 
         btnWeightLauncher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(MainActivity.this, BMIActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, BMIActivity.class);
+                startActivity(intent);
             }
         });
     }

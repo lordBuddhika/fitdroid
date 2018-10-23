@@ -36,8 +36,28 @@ public class RouteDatabase extends SQLiteOpenHelper {
              COLUMN_NAME_TOPSPEED + " text, " +
              COLUMN_NAME_DURATION + " text, " +
              COLUMN_NAME_TIMESTART + " text, " +
-             COLUMN_NAME_TIMEEND + " text)"
+             COLUMN_NAME_TIMEEND + " text);" +
+             "CREATE TABLE bmi (" +
+             "bmi_id" + " integer PRIMARY KEY, " +
+             "date" + " text, " +
+             "weight" + " text, " +
+             "height" + " text)"
         );
+
+        sqLiteDatabase.execSQL(
+            "CREATE TABLE bmi (" +
+            "bmi_id" + " integer PRIMARY KEY, " +
+            "date" + " text, " +
+            "weight" + " text, " +
+            "height" + " text)"
+        );
+
+        sqLiteDatabase.execSQL(
+            "CREATE TABLE alarm (" +
+                "alarm_id" + " integer PRIMARY KEY, " +
+                "time" + " text)"
+        );
+
     }
 
     @Override

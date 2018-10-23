@@ -1,6 +1,8 @@
 package lk.sliit.mad.fitdroid;
 
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -127,6 +129,20 @@ public class RouteActivity extends AppCompatActivity {
         tvTopspeed.setText(String.valueOf(precision_two.format(top_speed)));
         tvDuration.setText(precision_two.format(duration/60));
 
+    }
+
+    public void notification() {
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "test")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("My notification")
+                .setContentText("Much longer text that cannot fit one line...")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("Much longer text that cannot fit one line..."))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(3262346, mBuilder.build());
     }
 
     private void startClock(){
