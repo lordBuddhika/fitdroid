@@ -32,8 +32,16 @@
         <activity android:name=".BMIActivity" />
         <activity android:name=".BMIOptionsActivity" />
         <activity android:name=".AlarmActivity" />
-        <activity android:name=".SleepTrackerActivity" />
-        <activity android:name=".SleepTrackerUpdateActivity" />
+        <activity android:name=".SleepTrackerActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".SleepTrackerUpdateActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SleepTrackerActivity"/>
+        </activity>
         <activity android:name=".AddAlarmActivity"></activity>
     </application>
 

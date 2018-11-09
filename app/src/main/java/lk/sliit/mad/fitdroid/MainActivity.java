@@ -6,12 +6,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import app.RouteDatabase;
+
 public class MainActivity extends AppCompatActivity {
+
+    static RouteDatabase route_database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        route_database = new RouteDatabase(getApplicationContext());
 
         ImageButton btnAlarmLauncher = findViewById(R.id.btnAlarm);
         ImageButton btnSleepLauncher = findViewById(R.id.btnSleepTracker);

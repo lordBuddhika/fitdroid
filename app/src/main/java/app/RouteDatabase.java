@@ -36,12 +36,7 @@ public class RouteDatabase extends SQLiteOpenHelper {
              COLUMN_NAME_TOPSPEED + " text, " +
              COLUMN_NAME_DURATION + " text, " +
              COLUMN_NAME_TIMESTART + " text, " +
-             COLUMN_NAME_TIMEEND + " text);" +
-             "CREATE TABLE bmi (" +
-             "bmi_id" + " integer PRIMARY KEY, " +
-             "date" + " text, " +
-             "weight" + " text, " +
-             "height" + " text)"
+             COLUMN_NAME_TIMEEND + " text);"
         );
 
         sqLiteDatabase.execSQL(
@@ -58,11 +53,20 @@ public class RouteDatabase extends SQLiteOpenHelper {
                 "time" + " text)"
         );
 
+        sqLiteDatabase.execSQL(
+                "CREATE TABLE sleeptracker (" +
+                        "slp_id" + " integer PRIMARY KEY, " +
+                        "startt" + " text, " +
+                        "endt" + " text)"
+        );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + "bmi");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + "alarm");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + "sleeptracker");
     }
 
     public int getRouteRows() {
